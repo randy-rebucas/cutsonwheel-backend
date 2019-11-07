@@ -1,0 +1,14 @@
+// twilio
+FRIENDLY NAME
+cutsonwheel
+
+SID
+SK48e1bbc8e574909276a29223b4f0e51c
+
+KEY TYPE
+Standard
+
+SECRET
+GOLeXkU0YnMBoy5Ay5TpeD9eJ9hLlfGY
+-------
+npm install --save bcryptjs
