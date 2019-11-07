@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const ip = require("ip");
 // const sharp = require('sharp');
 // const moment = require('moment');
 const slugify = require('slugify');
