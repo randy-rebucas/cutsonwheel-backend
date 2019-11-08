@@ -11,4 +11,66 @@ Standard
 SECRET
 GOLeXkU0YnMBoy5Ay5TpeD9eJ9hLlfGY
 -------
-npm install --save bcryptjs
+
+registration
+	create a shop
+	edit shop
+	configure shop	
+		logo
+		banner
+		tagline
+		themplate
+		language
+		address
+		
+			pos
+			repair book
+			employee
+
+----------------
+book-now # view services
+book-now/{servicesId} # upon selecting services
+book-now/{servicesId}/assistant
+book-now/{servicesId}/schedule
+book-now/{servicesId}/location {register/signin}
+book-now/{servicesId}/summary
+book-now/{servicesId}/confirmation
+book-now/{servicesId}/payment
+##########
+customer - 
+select services
+select profesional from our list
+	[highlight{active, featured}]
+when do you want to be serve
+	[date {check if professional is available}, hour]
+RETURNING CUSTOMER? PLEASE, LOG-IN.
+	else
+	
+	register
+		
+------
+BOOKING SUMMARY
+Dear Randy Rebucas
+Here are the details of your booking:
+	date&time booked
+	assistants name
+	services booked
+	--total
+--
+BOOKING CONFIRMATION
+
+CHOOSE A PAYMENT OPTION
+Pending booking number: 8031
+Total amount of the reservation: €55
+Amount to be paid in advance: €16.50
+-
+You will receive a booking confirmation by email.If you do not receive an email in 5 minutes, check your Junk Mail or Spam Folder. If you need to change your reservation, please call 00391122334455 or send an e-mail to demo@salonbooking.it.
+-
+pay as a deposit on paypal
+or pay later
+-------------------------
+
+redirect to customer profile
+	appointments
+	update your profile
+	
