@@ -6,7 +6,9 @@ const classificationSchema = mongoose.Schema({
     description: { type: String, required: true },
     image: { type: String },
     services: [{
-        type: { type: String }
+        type: { type: String },
+        duration: { type: String },
+        price: { type: String }
     }]
 }, { strict: false, timestamps: {} });
 
