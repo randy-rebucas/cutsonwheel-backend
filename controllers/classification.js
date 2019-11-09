@@ -1,6 +1,5 @@
 const slugify = require('slugify');
 const Classification = require('../models/classification');
-const User = require('../models/user');
 
 exports.create = async(req, res, next) => {
     try {
@@ -126,6 +125,7 @@ exports.getAll = async(req, res, next) => {
 
 exports.getOne = async(req, res, next) => {
     try {
+        // Classification.
         const classification = await Classification.findOne({ _id: req.params.classificationId }).exec();
         res.status(200).json(classification);
     } catch (error) {
@@ -140,7 +140,7 @@ exports.delete = async(req, res, next) => {
         /**
          * delete collection
          */
-        let classification = await User.delete({ _id: req.params.classificationId });
+        let classification = await Classification.delete({ _id: req.params.classificationId });
         if (!classification) {
             throw new Error('Error in deleting classification!');
         }
