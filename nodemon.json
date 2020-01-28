@@ -1,6 +1,9 @@
 {
-  "env": {
-      "MONGO_ATLAS_PW": "RCDrkqkGv4OO44pV",
-      "JWT_KEY": "secret_this_should_be_longer"
-  }
+    "env": {
+        "MONGO_ATLAS_PW": "RCDrkqkGv4OO44pV",
+        "JWT_KEY": "secret_this_should_be_longer",
+        "TWILIO_ACCOUNT_ID": "AC51274904cf052c754e3bcc7d6c97d1dc",
+        "TWILIO_AUTH_TOKEN": "adb599c6f94480d218567c17553f131c",
+        "TWILIO_SERVICE_ID": "VA76bd9f9d73517effc67bb7ff0ea4d412"
+    }
 }

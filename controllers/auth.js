@@ -4,6 +4,12 @@ const Auth = require('../models/auth');
 const User = require('../models/user');
 
 const nodeMailer = require('nodemailer');
+// Download the helper library from https://www.twilio.com/docs/node/install
+// Your Account Sid and Auth Token from twilio.com/console
+// DANGER! This is insecure. See http://twil.io/secure
+const accountSid = process.env.TWILIO_ACCOUNT_ID; //'AC51274904cf052c754e3bcc7d6c97d1dc';
+const authToken = process.env.TWILIO_AUTH_TOKEN; // 'adb599c6f94480d218567c17553f131c';
+const client = require('twilio')(accountSid, authToken);
 
 var _jade = require('jade');
 var fs = require('fs');
@@ -102,40 +108,82 @@ exports.register = async(req, res, next) => {
     }
 }
 
-exports.login = async(req, res, next) => {
+exports.verify = async(req, res, next) => {
     try {
-        /**
-         * Find email on auth collection
-         */
-        let auth = await Auth.findOne({ email: req.body.email });
-        if (!auth) {
-            throw new Error('Something went wrong. Your email is not listed!');
-        }
-        /**
-         * compare password
-         */
-        let decrypted = await bcrypt.compare(req.body.password, auth.password);
-        if (!decrypted) {
-            throw new Error('Something went wrong. Incorrect password!');
-        }
+        client
+            .verify
+            .services(process.env.TWILIO_SERVICE_ID)
+            .verificationChecks
+            .create({
+                to: req.body.phoneNumber, // '+639658155713', // req.body.phoneNumber
+                code: req.body.code
+            })
+            .then((response) => {
+                // verify set session
+                console.log(response)
+                res.status(200).send(response);
 
-        let user = await User.findOne({ _id: auth.userId });
+                // /**
+                //  * Find phoneNumber on auth collection
+                //  */
+                // let auth = await Auth.findOne({ phoneNumber: req.body.phoneNumber });
+                // if (!auth) {
+                //     throw new Error('Something went wrong. Your email is not listed!');
+                //     register new user
+                //     redirect to new user form
+                // }
+                // /**
+                //  * compare password
+                //  */
 
-        let token = await jwt.sign({
-                email: auth.email,
-                userId: user._id
-            },
-            process.env.JWT_KEY, {}
-        );
+                // let user = await User.findOne({ _id: auth.userId });
 
-        res.status(200).json({
-            token: token,
-            userId: user._id,
-            userEmail: auth.email
-        });
+                // let token = await jwt.sign({
+                //         phoneNumber: auth.phoneNumber,
+                //         userId: user._id
+                //     },
+                //     process.env.JWT_KEY, {}
+                // );
+
+                // res.status(200).json({
+                //     token: token,
+                //     userId: user._id,
+                //     userPhoneNumber: auth.phoneNumber
+                // });
+            });
     } catch (error) {
         res.status(500).json({
             message: error.message
         });
     }
+}
+
+exports.login = async(req, res, next) => {
+    try {
+        client
+            .verify
+            .services(process.env.TWILIO_SERVICE_ID)
+            .verifications
+            .create({
+                to: req.body.phoneNumber, // '+639658155713', // req.body.phoneNumber
+                channel: 'sms'
+            })
+            .then((verification) => {
+                // show code input
+                console.log(verification)
+                res.status.send(verification);
+            });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+
+    // client.messages.create({
+    //         body: 'Hello from Node',
+    //         to: '+639658155713', // Text this number
+    //         from: '+19132257510' // From a valid Twilio number
+    //     })
+    //     .then((message) => console.log(message.sid));
 }

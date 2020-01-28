@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+// add phone number
 const userSchema = mongoose.Schema({
     avatar: { type: String },
     firstname: { type: String, required: true },
