@@ -108,49 +108,53 @@ exports.register = async(req, res, next) => {
     }
 }
 
-exports.verify = async(req, res, next) => {
+exports.check = async(req, res, next) => {
     try {
-        client
+        let verificationCheck = await client
             .verify
             .services(process.env.TWILIO_SERVICE_ID)
             .verificationChecks
             .create({
                 to: req.body.phoneNumber, // '+639658155713', // req.body.phoneNumber
                 code: req.body.code
-            })
-            .then((response) => {
-                // verify set session
-                console.log(response)
-                res.status(200).send(response);
-
-                // /**
-                //  * Find phoneNumber on auth collection
-                //  */
-                // let auth = await Auth.findOne({ phoneNumber: req.body.phoneNumber });
-                // if (!auth) {
-                //     throw new Error('Something went wrong. Your email is not listed!');
-                //     register new user
-                //     redirect to new user form
-                // }
-                // /**
-                //  * compare password
-                //  */
-
-                // let user = await User.findOne({ _id: auth.userId });
-
-                // let token = await jwt.sign({
-                //         phoneNumber: auth.phoneNumber,
-                //         userId: user._id
-                //     },
-                //     process.env.JWT_KEY, {}
-                // );
-
-                // res.status(200).json({
-                //     token: token,
-                //     userId: user._id,
-                //     userPhoneNumber: auth.phoneNumber
-                // });
             });
+
+        // verify set session
+        console.log(verificationCheck);
+
+        if (verificationCheck.status != 'approved') {
+            throw new Error('Invalid verification code entered!');
+        }
+
+        let user = await User.findOne({ phoneNumber: req.body.phoneNumber });
+        // check if number registered
+        if (!user) {
+            /**
+             * Set extended entities from poeple to users collection
+             */
+            const newUser = new User({
+                phoneNumber: req.body.phoneNumber
+            });
+            user = await newUser.save();
+
+            if (!user) {
+                throw new Error('Something went wrong.Cannot save user!');
+            }
+        }
+
+        let token = await jwt.sign({
+                phoneNumber: user.phoneNumber,
+                userId: user._id
+            },
+            process.env.JWT_KEY, {}
+        );
+
+        res.status(200).json({
+            token: token,
+            userId: user._id,
+            userPhone: user.phoneNumber
+        });
+
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -158,7 +162,7 @@ exports.verify = async(req, res, next) => {
     }
 }
 
-exports.login = async(req, res, next) => {
+exports.verify = async(req, res, next) => {
     try {
         client
             .verify
@@ -168,10 +172,10 @@ exports.login = async(req, res, next) => {
                 to: req.body.phoneNumber, // '+639658155713', // req.body.phoneNumber
                 channel: 'sms'
             })
-            .then((verification) => {
-                // show code input
-                console.log(verification)
-                res.status.send(verification);
+            .then((response) => {
+                // verify set session
+                console.log(response)
+                res.status(200).send(response);
             });
 
     } catch (error) {
@@ -180,10 +184,4 @@ exports.login = async(req, res, next) => {
         });
     }
 
-    // client.messages.create({
-    //         body: 'Hello from Node',
-    //         to: '+639658155713', // Text this number
-    //         from: '+19132257510' // From a valid Twilio number
-    //     })
-    //     .then((message) => console.log(message.sid));
 }

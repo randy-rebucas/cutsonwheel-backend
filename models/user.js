@@ -1,39 +1,39 @@
 const mongoose = require('mongoose');
+
 // add phone number
 const userSchema = mongoose.Schema({
-    avatar: { type: String },
-    firstname: { type: String, required: true },
-    midlename: { type: String, default: null },
-    lastname: { type: String, required: true },
-    gender: { type: String, default: null },
-    age: { type: String, default: null },
-    birthdate: { type: Date, default: null },
-    status: { type: String, default: null },
-    contact: { type: String, default: null },
-    classification: { type: mongoose.Schema.Types.ObjectId, ref: 'Classifications' },
-    sss: { type: String, default: null },
-    tin: { type: String, default: null },
-    philhealth: { type: String, default: null },
-    address: [{
+    name: {
+        firstname: { type: String },
+        midlename: { type: String },
+        lastname: { type: String }
+    },
+    displayName: String,
+    email: {
+        type: String,
+        unique: true,
+        lowercase: true
+    },
+    isSetupCompleted: { type: Boolean, default: false },
+    phoneNumber: { type: Number },
+    photoUrl: { type: String },
+    address: {
         address1: { type: String }, // street address
         address2: { type: String }, // street address line 2
         city: { type: String },
         province: { type: String },
         postalCode: { type: Number },
         country: { type: String }
-    }],
-    activated: { type: Boolean, default: false }
+    },
+    roles: {
+        assistant: { type: Boolean },
+        client: { type: Boolean }
+    },
+    gender: { type: String },
+    birthdate: { type: Date },
+    classification: { type: mongoose.Schema.Types.ObjectId, ref: 'Classifications' },
+    sss: { type: String },
+    tin: { type: String },
+    philhealth: { type: String }
 }, { timestamps: {} });
-
-userSchema.virtual('fullName').get(() => {
-    return this.firstname + ' ' + this.lastname
-})
-
-userSchema.virtual('fullName').set((name) => {
-    let str = name.split(' ')
-
-    this.firstname = str[0]
-    this.lastname = str[1]
-})
 
 module.exports = mongoose.model('Users', userSchema);

@@ -140,31 +140,11 @@ exports.update = async(req, res, next) => {
         /**
          * Set common entities on people collection
          */
-        const newUser = new User({
-            _id: req.params.userId,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            midlename: req.body.midlename,
-            gender: req.body.gender,
-            age: req.body.age,
-            birthdate: req.body.birthdate,
-            status: req.body.status,
-            contact: req.body.contact,
-            sss: req.body.sss,
-            tin: req.body.tin,
-            philhealth: req.body.philhealth,
-            classification: req.body.classification
-        });
-        addressData = req.body.address;
-        for (let index = 0; index < addressData.length; index++) {
-            newUser.address.push(addressData[index]);
-        }
-
-        let user = await User.findOneAndUpdate({ _id: req.params.userId }, newUser, { new: true });
+        let user = await User.findOneAndUpdate({ _id: req.params.userId }, req.body, { new: true });
         if (!user) {
             throw new Error('Something went wrong.Cannot update user data!');
         }
-        res.status(200).json({ message: user.firstname + ' Update successful!' });
+        res.status(200).json({ message: req.body.name.firstname + ' Update successful!' });
 
     } catch (error) {
         res.status(500).json({
@@ -210,7 +190,7 @@ exports.upload = async(req, res, next) => {
         const url = req.protocol + '://' + req.get('host');
         let selectedAvatar = await User.findOneAndUpdate({
             _id: req.params.userId
-        }, { $set: { 'avatar': url + '/files/' + req.file.filename } }, { new: true });
+        }, { $set: { 'photoUrl': url + '/files/' + req.file.filename } }, { new: true });
         if (!selectedAvatar) {
             throw new Error('Error in updating user!');
         }

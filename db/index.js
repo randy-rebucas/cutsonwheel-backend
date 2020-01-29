@@ -16,7 +16,8 @@ const options = {
     family: null // Use IPv4, skip trying IPv6
 };
 
-mongoose.connect(
+mongoose
+    .connect(
         'mongodb+srv://randyr:' +
         process.env.MONGO_ATLAS_PW +
         '@main-1htay.mongodb.net/cutsonwheel?retryWrites=true&w=majority',
