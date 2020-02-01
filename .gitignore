@@ -46,3 +46,4 @@ testem.log
 Thumbs.db
 
 nodemon.json
+creds.txt
