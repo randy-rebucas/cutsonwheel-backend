@@ -18,9 +18,9 @@ const options = {
 
 mongoose
     .connect(
-        'mongodb+srv://randyr:' +
+        'mongodb+srv://cutsonwheel:' +
         process.env.MONGO_ATLAS_PW +
-        '@main-1htay.mongodb.net/cutsonwheel?retryWrites=true&w=majority',
+        '@main.obtnu.mongodb.net/cutsonwheel?retryWrites=true&w=majority',
         options
     )
     .then((connecting) => {
